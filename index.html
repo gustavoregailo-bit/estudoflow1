@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EstudoFlow — Organizador de Estudos</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="logo">
+        <div class="logo-icon">📚</div>
+        <span>EstudoFlow</span>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-view="dashboard">
+          <span class="nav-icon">🏠</span>
+          <span>Início</span>
+        </button>
+        <button class="nav-item" data-view="diario">
+          <span class="nav-icon">📅</span>
+          <span>Diário</span>
+        </button>
+        <button class="nav-item" data-view="mensal">
+          <span class="nav-icon">🗓️</span>
+          <span>Mensal</span>
+        </button>
+        <button class="nav-item" data-view="anual">
+          <span class="nav-icon">🎯</span>
+          <span>Metas Anuais</span>
+        </button>
+        <button class="nav-item" data-view="materias">
+          <span class="nav-icon">📖</span>
+          <span>Matérias</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="progress-mini">
+          <div class="progress-label">Progresso do dia</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="sidebar-progress"></div>
+          </div>
+          <div class="progress-text" id="sidebar-progress-text">0%</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Menu">☰</button>
+        <div class="topbar-title" id="view-title">Início</div>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" id="btn-nova-tarefa">
+            + Nova Tarefa
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEW: DASHBOARD -->
+      <section class="view active" id="view-dashboard">
+        <div class="dashboard-grid">
+          <div class="card card-welcome">
+            <h2 id="saudacao">Olá!</h2>
+            <p id="data-hoje"></p>
+            <div class="stats-row">
+              <div class="stat">
+                <span class="stat-value" id="stat-hoje">0</span>
+                <span class="stat-label">Tarefas hoje</span>
+              </div>
+              <div class="stat">
+                <span class="stat-value" id="stat-concluidas">0</span>
+                <span class="stat-label">Concluídas</span>
+              </div>
+              <div class="stat">
+                <span class="stat-value" id="stat-pendentes">0</span>
+                <span class="stat-label">Pendentes</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Tarefas de Hoje</h3>
+            <div id="lista-hoje" class="task-list"></div>
+            <p class="empty-msg" id="empty-hoje">Nenhuma tarefa para hoje. Que tal adicionar uma?</p>
+          </div>
+
+          <div class="card">
+            <h3>Próximas Metas</h3>
+            <div id="lista-metas-proximas" class="goal-list"></div>
+            <p class="empty-msg" id="empty-metas">Nenhuma meta cadastrada ainda.</p>
+          </div>
+
+          <div class="card">
+            <h3>Matérias em andamento</h3>
+            <div id="lista-materias-dash" class="subject-chips"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW: DIÁRIO -->
+      <section class="view" id="view-diario">
+        <div class="toolbar">
+          <div class="date-nav">
+            <button class="btn btn-icon" id="btn-dia-anterior">‹</button>
+            <input type="date" id="input-data-diario" />
+            <button class="btn btn-icon" id="btn-dia-proximo">›</button>
+            <button class="btn btn-ghost" id="btn-hoje">Hoje</button>
+          </div>
+          <div class="filter-group">
+            <select id="filtro-materia-diario">
+              <option value="">Todas as matérias</option>
+            </select>
+            <select id="filtro-status-diario">
+              <option value="">Todos os status</option>
+              <option value="pendente">Pendentes</option>
+              <option value="concluida">Concluídas</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card">
+          <div id="lista-diario" class="task-list detailed"></div>
+          <p class="empty-msg" id="empty-diario">Nenhuma tarefa neste dia.</p>
+        </div>
+      </section>
+
+      <!-- VIEW: MENSAL -->
+      <section class="view" id="view-mensal">
+        <div class="toolbar">
+          <div class="date-nav">
+            <button class="btn btn-icon" id="btn-mes-anterior">‹</button>
+            <h3 id="titulo-mes"></h3>
+            <button class="btn btn-icon" id="btn-mes-proximo">›</button>
+          </div>
+        </div>
+
+        <div class="card calendar-card">
+          <div class="calendar-header">
+            <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span>
+            <span>Qui</span><span>Sex</span><span>Sáb</span>
+          </div>
+          <div class="calendar-grid" id="calendario"></div>
+        </div>
+
+        <div class="card" style="margin-top: 1rem;">
+          <h3>Tarefas do dia selecionado</h3>
+          <div id="lista-mes-selecionado" class="task-list"></div>
+          <p class="empty-msg" id="empty-mes">Selecione um dia no calendário.</p>
+        </div>
+      </section>
+
+      <!-- VIEW: ANUAL -->
+      <section class="view" id="view-anual">
+        <div class="toolbar">
+          <h3>Metas de <span id="ano-atual"></span></h3>
+          <button class="btn btn-primary" id="btn-nova-meta">+ Nova Meta</button>
+        </div>
+
+        <div class="goals-grid" id="lista-metas"></div>
+        <p class="empty-msg" id="empty-anual">Nenhuma meta anual cadastrada. Crie sua primeira!</p>
+      </section>
+
+      <!-- VIEW: MATÉRIAS -->
+      <section class="view" id="view-materias">
+        <div class="toolbar">
+          <h3>Suas Matérias</h3>
+          <button class="btn btn-primary" id="btn-nova-materia">+ Nova Matéria</button>
+        </div>
+
+        <div class="subjects-grid" id="lista-materias"></div>
+        <p class="empty-msg" id="empty-materias">Nenhuma matéria cadastrada ainda.</p>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal: Nova / Editar Tarefa -->
+  <div class="modal-overlay" id="modal-tarefa">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-tarefa-titulo">Nova Tarefa</h3>
+        <button class="btn-close" data-close="modal-tarefa">×</button>
+      </div>
+      <form id="form-tarefa">
+        <input type="hidden" id="tarefa-id" />
+        <div class="form-group">
+          <label for="tarefa-titulo">Título *</label>
+          <input type="text" id="tarefa-titulo" required placeholder="Ex: Estudar Cinemática" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tarefa-data">Data</label>
+            <input type="date" id="tarefa-data" required />
+          </div>
+          <div class="form-group">
+            <label for="tarefa-hora">Horário</label>
+            <input type="time" id="tarefa-hora" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tarefa-materia">Matéria</label>
+            <select id="tarefa-materia"></select>
+          </div>
+          <div class="form-group">
+            <label for="tarefa-prioridade">Prioridade</label>
+            <select id="tarefa-prioridade">
+              <option value="baixa">Baixa</option>
+              <option value="media" selected>Média</option>
+              <option value="alta">Alta</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="tarefa-duracao">Duração estimada (min)</label>
+          <input type="number" id="tarefa-duracao" min="5" step="5" placeholder="60" />
+        </div>
+        <div class="form-group">
+          <label for="tarefa-notas">Notas</label>
+          <textarea id="tarefa-notas" rows="3" placeholder="Observações..."></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-close="modal-tarefa">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Nova Meta -->
+  <div class="modal-overlay" id="modal-meta">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-meta-titulo">Nova Meta Anual</h3>
+        <button class="btn-close" data-close="modal-meta">×</button>
+      </div>
+      <form id="form-meta">
+        <input type="hidden" id="meta-id" />
+        <div class="form-group">
+          <label for="meta-titulo">Meta *</label>
+          <input type="text" id="meta-titulo" required placeholder="Ex: Terminar o livro de Física" />
+        </div>
+        <div class="form-group">
+          <label for="meta-descricao">Descrição</label>
+          <textarea id="meta-descricao" rows="2"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="meta-prazo">Prazo</label>
+            <input type="date" id="meta-prazo" />
+          </div>
+          <div class="form-group">
+            <label for="meta-progresso">Progresso (%)</label>
+            <input type="number" id="meta-progresso" min="0" max="100" value="0" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="meta-materia">Matéria relacionada</label>
+          <select id="meta-materia"></select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-close="modal-meta">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Nova Matéria -->
+  <div class="modal-overlay" id="modal-materia">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-materia-titulo">Nova Matéria</h3>
+        <button class="btn-close" data-close="modal-materia">×</button>
+      </div>
+      <form id="form-materia">
+        <input type="hidden" id="materia-id" />
+        <div class="form-group">
+          <label for="materia-nome">Nome *</label>
+          <input type="text" id="materia-nome" required placeholder="Ex: Física" />
+        </div>
+        <div class="form-group">
+          <label for="materia-cor">Cor</label>
+          <input type="color" id="materia-cor" value="#3b82f6" />
+        </div>
+        <div class="form-group">
+          <label for="materia-meta-horas">Meta de horas/semana</label>
+          <input type="number" id="materia-meta-horas" min="0" step="0.5" placeholder="5" />
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-close="modal-materia">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
